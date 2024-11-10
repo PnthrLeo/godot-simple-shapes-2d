@@ -42,8 +42,8 @@ func draw_poly(radius: float, color: Color, texture: Texture) -> void:
 
 func _draw() -> void:
     if border_size > 0:
-        draw_poly(polygon_radius + border_size, border_color, null)
-    draw_poly(polygon_radius, polygon_color, polygon_texture)
+        draw_poly(polygon_radius, border_color, null)
+    draw_poly(polygon_radius - border_size, polygon_color, polygon_texture)
 
 func _enter_tree() -> void:
     #var parent_node: Node = get_parent();
@@ -81,6 +81,12 @@ func get_polygon_rotation() -> float:
 
 func set_border_size(size: float) -> void:
     border_size = size
+    
+    if border_size < 0.0:
+        border_size = 0.0  
+    if border_size > polygon_radius:
+        border_size = polygon_radius
+    
     queue_redraw()
 
 func get_border_size() -> float:
@@ -95,6 +101,10 @@ func get_vertices_num() -> int:
 
 func set_polygon_radius(value: float) -> void:
     polygon_radius = value
+    
+    if polygon_radius < 0:
+        polygon_radius = 0
+    
     queue_redraw()
 
 func get_polygon_radius() -> float:
