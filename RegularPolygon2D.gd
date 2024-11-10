@@ -36,7 +36,8 @@ func draw_poly(radius: float, color: Color, texture: Texture) -> void:
 	if polygon_texture:
 		var ts: Vector2 = polygon_texture.get_size()
 		for pt in points:
-			uvs.append((pt / radius / 2.0 + Vector2(0.5, 0.5)))
+			uvs.append((pt / radius / 2.0).rotated(
+				-deg_to_rad(polygon_rotation)) + Vector2(0.5, 0.5))
 
 	draw_colored_polygon(points, color, uvs, texture)
 
@@ -52,14 +53,14 @@ func setup_collision_shape() -> void:
 		shape.points = cacl_vertices_pos(polygon_radius)
 		
 		var collision_shape: CollisionShape2D = CollisionShape2D.new()
-		collision_shape.name = 'CollisionShape2D'
+		collision_shape.name = "CollisionShape2D"
 		collision_shape.shape = shape
 		parent_node.call_deferred("add_child", collision_shape)
 
 func remove_collision_shape(force: bool = false) -> void:
 	var parent_node: Node = get_parent();
 	if (is_auto_collision_shape || force) and parent_node is CollisionObject2D:
-		var collision_shape = parent_node.get_node('CollisionShape2D')
+		var collision_shape = parent_node.get_node("CollisionShape2D")
 		parent_node.call_deferred("remove_child", collision_shape)
 
 func _enter_tree() -> void:
